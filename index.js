@@ -7,6 +7,22 @@ const program = require('commander');
 const chalk = require('chalk');
 const templatePackage = require('./template/package.json');
 
+program
+    .option('-p --project <type>', 'project name');
+program.parse(process.argv);
+
+if (!program.project) {
+    console.log(chalk.red('[Error] please must arg -p'));
+    process.exit(0);
+}
+
+try {
+    fs.mkdirSync(program.project);
+} catch(e) {
+    console.log(chalk.red('[Error] Already folder exists'));
+    process.exit(0);
+}
+
 console.log('create react template...');
 
 const dependencies = [];
