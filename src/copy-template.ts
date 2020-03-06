@@ -1,8 +1,19 @@
+import fs from 'fs';
+import fse from 'fs-extra';
 import chalk from 'chalk';
 import boxen from 'boxen';
+import { execSync } from 'child_process';
 import templatePackage from './../template/package.json';
 
-const copyTemplate = (project) => {
+const copyTemplate = (project: string) => {
+
+    try {
+        fs.mkdirSync(project);
+    } catch(e) {
+        console.log(chalk.red(`Already exists foleder ${project}`));
+        process.exit(0);   
+    }
+
     console.log('create react template...');
 
     const dependencies = [];
@@ -40,6 +51,18 @@ const copyTemplate = (project) => {
     const description = boxen(`${dependenciesTitle}${dependenciesStr}${devDependenciesTitle}${devDependenciesStr}`, { padding: 1 });
 
     console.log(description);
+
+    fse.copySync('./template', project);
+    
+    const bufferPackageJSON = fs.readFileSync(`./${project}/package.json`);
+    const packageJSON = JSON.parse(bufferPackageJSON.toString('UTF-8'));
+    packageJSON['name'] = project;
+    fs.writeFileSync(`./${project}/package.json`, JSON.stringify(packageJSON, null, 4));
+
+    process.chdir(project);
+
+    execSync('npm install', {stdio: [0, 1, 2]});
+
 }
 
 export default copyTemplate;
