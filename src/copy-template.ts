@@ -1,5 +1,6 @@
 import fs from 'fs';
 import fse from 'fs-extra';
+import path from 'path';
 import chalk from 'chalk';
 import boxen from 'boxen';
 import { execSync } from 'child_process';
@@ -52,7 +53,7 @@ const copyTemplate = (project: string) => {
 
     console.log(description);
 
-    fse.copySync('./template', project);
+    fse.copySync(path.join(__dirname, './../template'), project);
     
     const bufferPackageJSON = fs.readFileSync(`./${project}/package.json`);
     const packageJSON = JSON.parse(bufferPackageJSON.toString('UTF-8'));
