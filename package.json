@@ -5,7 +5,8 @@
   "main": "./lib/src/index.js",
   "bin": "./lib/src/index.js",
   "scripts": {
-    "build": "tsc -p ."
+    "build": "tsc -p .",
+    "postbuild": "rm -r ./lib/template && cp -R ./template ./lib/template"
   },
   "repository": {
     "type": "git",
